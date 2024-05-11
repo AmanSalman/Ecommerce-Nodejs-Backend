@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { UserModel } from './../../../DB/models/user.model.js';
 import bcrypt from 'bcrypt';
+import { sendEmail } from '../../utls/email.js';
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
@@ -37,6 +38,7 @@ export const register = async (req, res) => {
             return res.status(500).json({ message: 'Error while creating user' });
         }
         return res.status(201).json( { message: 'success', newUser });
+        await sendEmail(email,`welcome to our online store`,`<h2>Hello ya ${username}</h2>`)
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal server error' });
