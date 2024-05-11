@@ -41,6 +41,6 @@ export const register = async (req, res) => {
         await sendEmail(email,`welcome to our online store`,`<h2>Hello ya ${username}</h2>`)
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' }); 
     }
 };
