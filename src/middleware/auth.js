@@ -23,9 +23,9 @@ export const auth = (accessRole = [])=>{
             return res.status(401).json({message:"user not found"});
         } 
         
-        if(!accessRole.includes(user.role)) {
-            return res.status(403).json({message:"unauthorized role"});
-        }
+        // if(!accessRole.includes(user.role)) {
+        //     return res.status(403).json({message:"unauthorized role"});
+        // }
         
         req.user = user;
         return next();

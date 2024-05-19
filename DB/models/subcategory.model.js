@@ -34,6 +34,9 @@ const SubCategorySchema = new Schema ({
         ref:'Category',
         required:true
     }
+}, 
+{
+    timestamps:true,
 })
 
 

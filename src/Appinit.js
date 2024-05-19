@@ -6,6 +6,7 @@ import orderRouter from './modules/order/order.router.js';
 import reviewRouter from './modules/review/review.router.js';
 import userRouter from './modules/user/user.router.js';
 import subcategoryRouter from './modules/subcategory/subcategory.router.js';
+import ProductRouter from './modules/product/product.router.js'
 import cors from 'cors'
 export const Appinit = ( app,express )=>{
     app.use(express.json());
@@ -15,7 +16,7 @@ export const Appinit = ( app,express )=>{
      }) 
     app.use('/auth', authRouter);
     app.use('/user', userRouter)
-    // app.use('/book', bookRouter);
+    app.use('/product', ProductRouter);
     app.use('/subcategory', subcategoryRouter)
     app.use('/cart', cartRouter);
     app.use('/category', categoryRouter);
