@@ -38,12 +38,18 @@ export const create = async (req,res)=>{
 
 export const getProducts = async(req, res) =>{
     const{skip,limit} =pagination(req.query.page,req.query.limit)
-    const queryObject ={ ...req.query}
+    let queryObject ={ ...req.query}
     const execQuery = ['page', 'limit']
 
     execQuery.map((ele)=>{
         delete queryObject[ele]
     })
+
+    queryObject = JSON.stringify(queryObject)
+    console.log(queryObject)
+    queryObject= queryObject.replace(/gt|gte|lt|lte|in|nin|eq/g, match => `$${match}`)
+    queryObject = JSON.parse(queryObject)
+    console.log(queryObject)
     const mongooseQuery = ProductModel.find(queryObject).limit(limit).skip(skip).select('name price')
     // .populate({
     //     path:'Reviews',
