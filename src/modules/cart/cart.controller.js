@@ -6,7 +6,7 @@ export const create = async (req,res) =>{
     const cart = await CartModel.findOne({userId: req.user._id});
     if(!cart){
         const cart = await CartModel.create({
-            userId: req.user._id,
+            userId: req.user.id,
             products: [productId]
         });
         return res.status(200).json({message:"success", cart})

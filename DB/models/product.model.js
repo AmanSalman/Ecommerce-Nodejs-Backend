@@ -69,6 +69,15 @@ const ProductSchema = new Schema ({
     }
 },{
     timestamps:true,
+    toJSON:{virtuals:true},
+    toObject:{virtuals:true},
+
+})
+
+ProductSchema.virtual('Reviews', {
+    ref:'Review',
+    localField:'_id',
+    foreignField:'productId'
 })
 
 export const ProductModel = model('Prodcut', ProductSchema);

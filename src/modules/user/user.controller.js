@@ -33,3 +33,9 @@ export const Activate = async (req,res)=> {
     return res.status(200).json({message:"success",Activated});
     
 }  
+
+
+export const userData = async (req,res)=>{
+    const user = await UserModel.findById(req.user.id)
+    return res.status(200).json({message:"success",user})
+}
