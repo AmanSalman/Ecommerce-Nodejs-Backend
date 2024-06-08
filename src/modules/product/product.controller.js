@@ -57,7 +57,17 @@ export const getProducts = async(req, res) =>{
     //        path: 'user'
     //     }
     // }).select('name')
+    if(req.query.search){
+        mongooseQuery.find({
+            $or:[
+                {name:{$regex:req.query.search}},
+                {description:{$regex:req.query.search}}
+            ]
+        })
+    }
+    const count = await ProductModel.estimatedDocumentCount()
+    mongooseQuery.select(req.query.fields)
 
-    const products = await mongooseQuery
+    const products = await mongooseQuery.sort(req.query.sort).select('name price')
     return res.status(200).json({message:"success", products})
 }
