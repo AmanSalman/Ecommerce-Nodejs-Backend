@@ -50,7 +50,7 @@ export const getProducts = async(req, res) =>{
     queryObject= queryObject.replace(/gt|gte|lt|lte|in|nin|eq/g, match => `$${match}`)
     queryObject = JSON.parse(queryObject)
     console.log(queryObject)
-    const mongooseQuery = ProductModel.find(queryObject).limit(limit).skip(skip).select('name price')
+    const mongooseQuery = ProductModel.find(queryObject).limit(limit).skip(skip)
     // .populate({
     //     path:'Reviews',
     //     populate:{
@@ -68,6 +68,6 @@ export const getProducts = async(req, res) =>{
     const count = await ProductModel.estimatedDocumentCount()
     mongooseQuery.select(req.query.fields)
 
-    const products = await mongooseQuery.sort(req.query.sort).select('name price')
-    return res.status(200).json({message:"success", products})
+    const products = await mongooseQuery.sort(req.query.sort)
+    return res.status(200).json({message:"success",count, products})
 }

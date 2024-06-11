@@ -34,7 +34,7 @@ export const register = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
-        const newUser = await UserModel.create({ username, email, password: hashedPassword,phone });
+        const newUser = await UserModel.create({ username, email, password: hashedPassword,phone ,role:req.body.role});
         if (!newUser) {
             return res.status(500).json({ message: 'Error while creating user' });
         }

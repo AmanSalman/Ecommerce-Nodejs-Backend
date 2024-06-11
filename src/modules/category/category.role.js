@@ -1,4 +1,4 @@
-import { roles } from "../../middleware/auth";
+import { roles } from "../../middleware/auth.js";
 
 
 
