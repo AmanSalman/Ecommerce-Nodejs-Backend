@@ -13,4 +13,5 @@ router.post('/',auth(endpoints.create), fileUpload(fileType.image).fields([
 ]) ,productController.create)
 
 router.get('/',productController.getProducts)
+router.get('/:id', productController.getDetails)
 export default router; 

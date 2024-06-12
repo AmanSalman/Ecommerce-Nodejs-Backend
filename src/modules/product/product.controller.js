@@ -71,3 +71,9 @@ export const getProducts = async(req, res) =>{
     const products = await mongooseQuery.sort(req.query.sort)
     return res.status(200).json({message:"success",count, products})
 }
+
+
+export const getDetails = async (req, res) => {
+    const product = await ProductModel.findById(req.params.id);
+    return res.status(200).json({message:"success", product})
+}
