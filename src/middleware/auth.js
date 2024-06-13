@@ -8,6 +8,7 @@ export  const roles = {
 export const auth = (accessRole = [])=>{
     return async (req,res,next)=>{
         const {authorization} = req.headers;
+        console.log(authorization)
         if(!authorization || !authorization.startsWith(process.env.BEARERTOKEN)){
             return res.status(400).json({message:"invalid token"});
           } 

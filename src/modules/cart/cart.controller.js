@@ -1,37 +1,37 @@
 import mongoose from "mongoose";
-import { CartModel } from "../../../DB/models/cart.model.js";
-import { ProductModel } from "../../../DB/models/product.model.js";
+import { CartModel } from './../../../DB/models/cart.model.js';
 
 export const create = async (req, res) => {
-    try {
-      const { productId } = req.body;
-      const cart = await CartModel.findOne({ userId: req.user._id });
-  
-      if (!cart) {
-        const newCart = await CartModel.create({
-          userId: req.user._id,
-          products: [{ productId: mongoose.Types.ObjectId(productId) }]
-        });
-        return res.status(200).json({ message: "success", cart: newCart });
-      }
-  
-      const productExists = cart.products.some(
-        (product) => product.productId.toString() === productId
-      );
-  
-      if (productExists) {
-        return res.status(400).json({ message: "product already added" });
-      }
-  
-      cart.products.push({ productId: mongoose.Types.ObjectId(productId) });
-      await cart.save();
-  
-      return res.status(200).json({ message: "success", cart });
-    } catch (error) {
-      console.error("Error creating/updating cart:", error);
-      return res.status(500).json({ message: "Internal Server Error" });
+  try {
+    const { productId } = req.body;
+    const cart = await CartModel.findOne({ userId: req.user._id });
+
+    if (!cart) {
+      const newCart = await CartModel.create({
+        userId: req.user._id,
+        products: [{ productId: new mongoose.Types.ObjectId(productId) }]
+      });
+      return res.status(200).json({ message: "success", cart: newCart });
     }
-  };
+
+    const productExists = cart.products.some(
+      (product) => product.productId.toString() === productId
+    );
+
+    if (productExists) {
+      return res.status(400).json({ message: "product already added" });
+    }
+
+    cart.products.push({ productId: new mongoose.Types.ObjectId(productId) });
+    await cart.save();
+
+    return res.status(200).json({ message: "success", cart });
+  } catch (error) {
+    console.error("Error creating/updating cart:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 
 
 export const remove = async (req,res) =>{
