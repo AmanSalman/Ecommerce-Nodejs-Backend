@@ -34,14 +34,31 @@ export const create = async (req, res) => {
 
 
 
-export const remove = async (req,res) =>{
-    const {productId} = req.params;
-    const cart = await CartModel.findOneAndUpdate({userId: req.user._id},
-        {$pull: {products: {productId:productId}}},
-        {new: true}
-    )
-    return res.status(200).json({message:"success", cart})
-}
+export const remove = async (req, res) => {
+    const { productId } = req.params;
+    const userId = req.user._id;
+
+    try {
+        // Find the cart for the current user
+        const cart = await CartModel.findOne({ userId });
+
+        if (!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+
+        // Filter out the product from the cart's products array
+        cart.products = cart.products.filter(product => product.productId.toString() !== productId);
+
+        // Save the updated cart
+        await cart.save();
+
+        return res.status(200).json({ message: "success", newcart:cart });
+    } catch (error) {
+        console.error("Error removing product from cart:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
 
 export const getCart = async (req,res) =>{
     const cart = await CartModel.findOne({userId: req.user._id});
