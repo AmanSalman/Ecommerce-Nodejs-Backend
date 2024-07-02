@@ -28,18 +28,14 @@ export const login = async (req, res) => {
 export const register = async (req, res) => {
     const { username, email, password,phone } = req.body;
     try {
-        const user = await UserModel.findOne({ email });
-        if (user) {
-            return res.status(409).json({ message: 'Email already exists' });
-        }
-
         const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
         const newUser = await UserModel.create({ username, email, password: hashedPassword,phone ,role:req.body.role});
         if (!newUser) {
             return res.status(500).json({ message: 'Error while creating user' });
         }
+        const token = jwt.sign({email}, process.env.SIGNConfirm)
+        await sendEmail({to:email,subject: 'welcome',userName:username, token})
         return res.status(201).json( { message: 'success', newUser });
-        await sendEmail(email,`welcome to our online store`,`<h2>Hello ya ${username}</h2>`)
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal server error' }); 
@@ -82,4 +78,12 @@ export const forgetPassword = async (req, res) => {
     user.sendCode = null;
     await user.save()
     return res.status(200).json({ message: "success" });
+}
+
+
+export const confirmEmail = async (req,res)=>{
+	const token = req.params.token
+	const decoded = jwt.verify(token, process.env.SIGNConfirm)
+	await UserModel.findOneAndUpdate({email:decoded.email}, {confirmEmail:true})
+	return res.status(200).json({message: "success"})
 }

@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
+import { emailTemplate } from "./EmailTemp.js";
 
-export async function sendEmail({ to, subject, html }) {
+export async function sendEmail({to,subject,userName='',token}) {
     try {
         if (!to) {
             throw new Error("No recipients defined");
@@ -18,7 +19,7 @@ export async function sendEmail({ to, subject, html }) {
             from: `Aman Store ${process.env.email}`,
             to,
             subject,
-            html,
+            html:emailTemplate(userName, token),
         });
 
         console.log("Email sent:", info.response);
