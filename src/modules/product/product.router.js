@@ -4,13 +4,15 @@ import { endpoints } from "./product.role.js";
 import fileUpload, { fileType } from "../../utls/multer.js";
 import { auth } from "../../middleware/auth.js";
 import reviewController from '../review/review.router.js'
+import { validation } from "../../middleware/validation.js";
+import { createProduct } from "./product.validation.js";
 const router = Router()
  
 router.use('/:productId/review', reviewController)
 router.post('/',auth(endpoints.create), fileUpload(fileType.image).fields([
     { name: 'MainImage', maxCount: 1 },
     { name: 'subImage', maxCount: 10 }
-]) ,productController.create)
+]), validation(createProduct) ,productController.create)
 
 router.get('/',productController.getProducts)
 router.get('/:id', productController.getDetails)

@@ -2,14 +2,16 @@ import { Router } from "express";
 import * as cartController from './cart.controller.js';
 import {auth} from '../../middleware/auth.js'
 import { endpoints } from "./cart.role.js";
+import { validation } from './../../middleware/validation.js';
+import { CRCart } from "./cart.validation.js";
 const router = Router()
 
 router.post('/', auth(endpoints.create),cartController.create)
-router.put('/:productId', auth(endpoints.create),cartController.remove)
+router.put('/:productId', validation(CRCart), auth(endpoints.create),cartController.remove)
 router.get('/', auth(endpoints.create),cartController.getCart)
 router.put('/', auth(endpoints.create),cartController.clearcart)
-// router.post('/increaseQty/:productId', auth(endpoints.create), cartController.increasecart)
-// router.post('/decreaseQty/:productId', auth(endpoints.create), cartController.decreasecart)
-router.post('/UpdateQty/:productId', auth(endpoints.create), cartController.updateQty)
+router.post('/increaseQty/:productId', validation(CRCart), auth(endpoints.create), cartController.increasecart)
+router.post('/decreaseQty/:productId', validation(CRCart), auth(endpoints.create), cartController.decreasecart)
+router.post('/UpdateQty/:productId', validation(CRCart), auth(endpoints.create), cartController.updateQty)
 
 export default router;

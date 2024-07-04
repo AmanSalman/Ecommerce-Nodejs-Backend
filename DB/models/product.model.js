@@ -8,11 +8,11 @@ const ProductSchema = new Schema ({
         unique:true
     },
     MainImage:{
-        type:Object
+        type:Object,
+        require:true
     },
     subImage:[{
         type:Object,
-        required:true
     }],
     slug:{
         type:String,
