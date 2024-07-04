@@ -2,6 +2,9 @@ import express from 'express'
 import 'dotenv/config'
 import { connectDB } from './DB/connection.js';
 import { Appinit } from './src/Appinit.js';
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.SecretKey);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
