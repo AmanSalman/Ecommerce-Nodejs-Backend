@@ -3,6 +3,8 @@ import { UserModel } from './../../../DB/models/user.model.js';
 import bcrypt from 'bcrypt';
 import { sendEmail } from '../../utls/email.js';
 import { customAlphabet } from 'nanoid';
+import xlsx from "xlsx";
+
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
@@ -40,6 +42,21 @@ export const register = async (req, res) => {
         console.error(error);
         return res.status(500).json({ message: 'Internal server error' }); 
     }
+};
+
+
+export const addUserExcel = async (req, res) => {
+  try {
+    const workbook = xlsx.readFile(req.file.path);
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const users = xlsx.utils.sheet_to_json(worksheet);
+    const usersAdd = await UserModel.insertMany(users);
+
+    return res.json({message:"success"});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error processing the Excel file', error: error.message });
+  }
 };
 
 

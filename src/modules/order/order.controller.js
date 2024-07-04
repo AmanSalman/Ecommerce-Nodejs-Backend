@@ -77,8 +77,6 @@ export const create = async (req, res) => {
     cancel_url: `${process.env.Front_URL}/cart`,
   });
 
-  return res.json(session);
-
   const order = await OrderModel.create({
     userId: req.user.id,
     products: finalProductList,
@@ -114,7 +112,7 @@ export const create = async (req, res) => {
     );
   }
 
-  return res.status(200).json({ message: "success", order });
+  return res.status(200).json({ message: "success", order, url:session.url });
 };
 
 export const getorders = async (req, res) => {
