@@ -21,11 +21,8 @@ export async function sendEmail({to,subject,userName='',token}) {
             subject,
             html:emailTemplate(userName, token),
         });
-
-        console.log("Email sent:", info.response);
         return info;
     } catch (error) {
-        console.error("Error sending email:", error.message);
         throw error; // Re-throw the error for handling in the calling function
     }
 }

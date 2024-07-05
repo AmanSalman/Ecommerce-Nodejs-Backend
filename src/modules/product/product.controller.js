@@ -48,10 +48,8 @@ export const getProducts = async(req, res) =>{
     })
 
     queryObject = JSON.stringify(queryObject)
-    console.log(queryObject)
     queryObject = queryObject.replace(/gt|gte|lt|lte|in|nin|eq/g, match => `$${match}`)
     queryObject = JSON.parse(queryObject)
-    console.log(queryObject)
     const mongooseQuery = ProductModel.find(queryObject).limit(limit).skip(skip)
     .populate({
         path:'Reviews',

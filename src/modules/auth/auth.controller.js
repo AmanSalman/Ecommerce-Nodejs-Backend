@@ -22,7 +22,6 @@ export const login = async (req, res) => {
         const token = jwt.sign({ id: user._id, role:user.role,status:user.status }, process.env.JWT_SECRET); 
         return res.status(200).json({ message: 'success', token });
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -39,7 +38,6 @@ export const register = async (req, res) => {
         await sendEmail({to:email,subject: 'welcome',userName:username, token})
         return res.status(201).json( { message: 'success', newUser });
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ message: 'Internal server error' }); 
     }
 };
@@ -53,7 +51,6 @@ export const addUserExcel = async (req, res) => {
     const usersAdd = await UserModel.insertMany(users);
     return res.json({message:"success"});
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: 'Error processing the Excel file', error: error.message });
   }
 };
@@ -73,7 +70,6 @@ export const sendCode = async (req, res) => {
 
         return res.status(200).json({ message: "Success" });
     } catch (error) {
-        console.error("Error sending code:", error.message);
         return res.status(500).json({ message: "Internal Server Error" });
     }
 }

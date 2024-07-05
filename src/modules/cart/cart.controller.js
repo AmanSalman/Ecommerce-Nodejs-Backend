@@ -27,7 +27,6 @@ export const create = async (req, res) => {
 
     return res.status(200).json({ message: "success", cart });
   } catch (error) {
-    console.error("Error creating/updating cart:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -54,7 +53,6 @@ export const remove = async (req, res) => {
 
         return res.status(200).json({ message: "success", newcart:cart });
     } catch (error) {
-        console.error("Error removing product from cart:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
 };
