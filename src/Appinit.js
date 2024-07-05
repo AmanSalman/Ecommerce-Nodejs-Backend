@@ -12,7 +12,7 @@ export const Appinit = (app, express) => {
   app.use(express.json());
   const allowedOrigins = [
     "http://localhost:5173",
-    "https://dashboardgraduation.onrender.com",
+    "https://ashop-26x1.onrender.com",
   ];
 
   app.use(
