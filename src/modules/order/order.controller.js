@@ -4,6 +4,7 @@ import { CartModel } from "./../../../DB/models/cart.model.js";
 import { UserModel } from "./../../../DB/models/user.model.js";
 import { CouponModel } from "./../../../DB/models/Coupon.model.js";
 import Stripe from "stripe";
+import createInvoice from './../../utls/pdf.js';
 const stripe = new Stripe(process.env.SecretKey);
 
 export const create = async (req, res) => {
@@ -86,6 +87,18 @@ export const create = async (req, res) => {
   });
 
   if (order) {
+const invoice = {
+  shipping: {
+    name: user.username, 
+    address: req.body.Address,
+    phone:req.body.phone
+  },
+  items: order.products,
+  subtotal:order.finalPrice,
+  invoice_nr: order._id
+};
+
+createInvoice(invoice, "orderDetails.pdf");
     for (const product of req.body.products) {
       const updateproduct = await ProductModel.findOneAndUpdate(
         { _id: product.productId },

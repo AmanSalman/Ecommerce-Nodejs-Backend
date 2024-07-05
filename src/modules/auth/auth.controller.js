@@ -51,7 +51,6 @@ export const addUserExcel = async (req, res) => {
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const users = xlsx.utils.sheet_to_json(worksheet);
     const usersAdd = await UserModel.insertMany(users);
-
     return res.json({message:"success"});
   } catch (error) {
     console.error(error);
