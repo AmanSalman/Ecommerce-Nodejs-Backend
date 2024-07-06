@@ -16,5 +16,5 @@ router.get('/active', categoryController.getActive);
 router.get('/:id', validation(DeleteCategory), categoryController.getDetails);
 router.patch('/:id', auth(endpoints.update), validation(updateCategory), fileUpload(fileType.image).single('image'), categoryController.update);
 router.delete('/:id', auth(endpoints.delete), validation(DeleteCategory), categoryController.Delete );
-router.get('/products/:id', auth(endpoints.delete) , categoryController.getProducts)
+router.get('/products/:id', categoryController.getProducts)
 export default router;
