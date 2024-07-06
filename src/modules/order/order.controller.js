@@ -15,8 +15,13 @@ export const create = async (req, res) => {
 
   req.body.products = cart[0].products;
 
+<<<<<<< HEAD
   if (req.body.couponId && req.body.couponId !='') {
     const coupon = await CouponModel.findById({name:req.body.couponId});
+=======
+  if (req.body.couponId) {
+    const coupon = await CouponModel.find({name:req.body.couponId});
+>>>>>>> f3753c910ab09a59739afd1703410255d10bfa99
     if (!coupon) {
       return res.status(400).json({ message: "coupon not found" });
     }
