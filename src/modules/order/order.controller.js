@@ -15,15 +15,15 @@ export const create = async (req, res) => {
 
   req.body.products = cart[0].products;
 
-  if (req.body.couponId) {
-    const coupon = await CouponModel.findById(req.body.couponId);
+  if (req.body.couponId && req.body.couponId !='') {
+    const coupon = await CouponModel.findById({name:req.body.couponId});
     if (!coupon) {
       return res.status(400).json({ message: "coupon not found" });
     }
-    if (coupon.expireDate < Date.now()) {
+    if (coupon?.expireDate < Date.now()) {
       return res.status(400).json({ message: "coupon is expired" });
     }
-    if (coupon.usedBy.includes(req.user.id)) {
+    if (coupon?.usedBy?.includes(req.user.id)) {
       return res.status(400).json({ message: "coupon is already used" });
     }
     req.body.coupon = coupon;
