@@ -38,56 +38,60 @@ export const create = async (req,res)=>{
 }
 
 
-export const getProducts = async(req, res) =>{
-    const{skip,limit} = pagination(req.query.page,req.query.limit)
-    let queryObject = { ...req.query}
-    const execQuery = ['page', 'limit']
+export const getProducts = async (req, res) => {
+    const { skip, limit } = pagination(req.query.page, req.query.limit);
+    let queryObject = { ...req.query };
+    const execQuery = ['page', 'limit'];
 
-    execQuery.map((ele)=>{
-        delete queryObject[ele]
-    })
+    execQuery.forEach(ele => {
+        delete queryObject[ele];
+    });
 
-    queryObject = JSON.stringify(queryObject)
-    queryObject = queryObject.replace(/gt|gte|lt|lte|in|nin|eq/g, match => `$${match}`)
-    queryObject = JSON.parse(queryObject)
+    queryObject = JSON.stringify(queryObject);
+    queryObject = queryObject.replace(/gt|gte|lt|lte|in|nin|eq/g, match => `$${match}`);
+    queryObject = JSON.parse(queryObject);
+
+    // Add condition for stock greater than 0
+    queryObject.stock = { $gt: 0 };
+
     const mongooseQuery = ProductModel.find(queryObject).limit(limit).skip(skip)
-    .populate({
-        path:'Reviews',
-        populate:{
-           path: 'user'
-        }
-    })
-    if(req.query.search){
+        .populate({
+            path: 'Reviews',
+            populate: {
+                path: 'user'
+            }
+        });
+
+    if (req.query.search) {
         mongooseQuery.find({
-            $or:[
-                {name:{$regex:req.query.search}},
-                {description:{$regex:req.query.search}}
+            $or: [
+                { name: { $regex: req.query.search } },
+                { description: { $regex: req.query.search } }
             ]
-        })
+        });
     }
-    const count = await ProductModel.estimatedDocumentCount()
-    mongooseQuery.select(req.query.fields)
+    const count = await ProductModel.estimatedDocumentCount();
+    mongooseQuery.select(req.query.fields);
 
-    let products = await mongooseQuery.sort(req.query.sort)
-    
+    let products = await mongooseQuery.sort(req.query.sort);
 
-    products = products.map(product=>{
-        return {
-            ...product.toObject(),
-            image: product.MainImage.secure_url,
-            subImage: product.subImage.map(img => img.secure_url)
-        }
-    }
-    )
+    // Map products and transform as needed
+    products = products.map(product => ({
+        ...product.toObject(),
+        image: product.MainImage.secure_url,
+        subImage: product.subImage.map(img => img.secure_url)
+    }));
 
-    return res.status(200).json({message:"success",count, products})
-    // const products = await ProductModel.find().populate({
+    return res.status(200).json({ message: "success", count, products });
+
+     // const products = await ProductModel.find().populate({
     //     path:'Reviews',
     //     populate:{
     //        path: 'user'
     //     }})
     // return res.status(200).json({message:"success", products})
-}
+};
+
 
 
 export const getDetails = async (req, res) => {
