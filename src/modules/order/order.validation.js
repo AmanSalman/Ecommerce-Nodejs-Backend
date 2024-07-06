@@ -3,6 +3,7 @@ import joi from 'joi'
 
 export const IdSchema = joi.object({
   id: joi.string().hex().length(24).required(),
+  status:joi.string().valid('pending', 'delivered', 'cancelled', 'confirmed', 'onway').required()
 })
 
 
