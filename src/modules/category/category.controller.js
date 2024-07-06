@@ -1,6 +1,8 @@
 import slugify from "slugify";
 import { CategoryModel } from "../../../DB/models/category.model.js";
 import cloudinary from './../../utls/cloudinary.js';
+import { ProductModel } from "../../../DB/models/product.model.js";
+
 
 // export const Create = async(req,res)=>{
 //     req.body.name = req.body.name.toLowerCase();
@@ -85,4 +87,11 @@ export const Delete = async (req,res)=>{
     await cloudinary.uploader.destroy(category.image.public_id);
     await CategoryModel.findByIdAndDelete(id);
     return res.status(200).json({message:"success"});
+}
+
+export const getProducts = async (req,res,next)=>{
+    const {id} = req.params;
+    const products = await ProductModel.find({categoryId:id})
+    return res.status(200).json({message:'success', products});
+
 }
