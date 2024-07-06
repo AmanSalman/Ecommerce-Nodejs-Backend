@@ -16,7 +16,7 @@ export const create = async (req, res) => {
   req.body.products = cart[0].products;
 
 <<<<<<< HEAD
-  if (req.body.couponId && req.body.couponId !='') {
+  if (req.body.couponId !='' && req.body.couponId) {
     const coupon = await CouponModel.findById({name:req.body.couponId});
 =======
   if (req.body.couponId) {
