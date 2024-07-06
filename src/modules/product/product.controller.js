@@ -95,6 +95,11 @@ export const getProducts = async (req, res) => {
 
 
 export const getDetails = async (req, res) => {
-    const product = await ProductModel.findById(req.params.id);
+    const product = await ProductModel.findById(req.params.id).populate({
+        path:'Reviews',
+        populate:{
+            path: 'user'
+        }
+    })
     return res.status(200).json({message:"success", product})
 }
